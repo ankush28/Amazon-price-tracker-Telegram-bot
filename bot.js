@@ -108,7 +108,7 @@ bot.onText(/\/start/, (msg) => {
   const chatId = msg.chat.id;
 
   const message = `Welcome to the Amazon Price Tracker Bot!\n\nThis bot allows you to track the prices of Amazon products. Here are the available commands:\n\n` +
-    `/track <product_link> - Add a product link to track the price\n` +
+    `/track <product_link> - eg.(/track https://amzn.eu/d/6F17Xqk) - (1. Select Size and Color of the Product before Gnerating the link. \n 2. Don't Add Product Description from the Link Copied)\n` +
     `/list - List all the products you are tracking\n` +
     `/start - Show available commands\n` +
     `/contact - Get in touch with us`;
