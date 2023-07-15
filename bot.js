@@ -4,6 +4,7 @@ const schedule = require('node-schedule');
 const mongoose = require('mongoose');
 const express = require('express');
 const app = express();
+require("dotenv").config();
 app.get('/', (req, res) => {
   res.send('Telegram Bot is running!');
 });
@@ -55,7 +56,18 @@ bot.onText(/\/track (.+)/, async (msg, match) => {
 
     // Add valid links to the database
     for (const validLink of validLinks) {
-      const browser = await puppeteer.launch();
+      const browser = await puppeteer.launch({
+        args: [
+          "--disable-setuid-sandbox",
+          "--no-sandbox",
+          "--single-process",
+          "--no-zygote",
+        ],
+        executablePath:
+          process.env.NODE_ENV === "production"
+            ? process.env.PUPPETEER_EXECUTABLE_PATH
+            : puppeteer.executablePath(),
+      });
       const page = await browser.newPage();
       await page.goto(validLink.trim());
 
@@ -138,7 +150,18 @@ schedule.scheduleJob('0 * * * *', async () => {
     const products = await Product.find().exec();
 
     for (const product of products) {
-      const browser = await puppeteer.launch();
+      const browser = await puppeteer.launch({
+        args: [
+          "--disable-setuid-sandbox",
+          "--no-sandbox",
+          "--single-process",
+          "--no-zygote",
+        ],
+        executablePath:
+          process.env.NODE_ENV === "production"
+            ? process.env.PUPPETEER_EXECUTABLE_PATH
+            : puppeteer.executablePath(),
+      });
       const page = await browser.newPage();
 
       await page.goto(product.link);
